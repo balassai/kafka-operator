@@ -158,3 +158,25 @@ func CheckIfObjectUpdated(log logr.Logger, desiredType reflect.Type, current, de
 		return true
 	}
 }
+
+func IsPodContainsTerminatedContainer(pod *corev1.Pod) bool {
+	contains := false
+	for _, containerState := range pod.Status.ContainerStatuses {
+		if containerState.State.Terminated != nil {
+			contains = true
+			break
+		}
+	}
+	return contains
+}
+
+func IsPodContainsPendingContainer(pod *corev1.Pod) bool {
+	contains := false
+	for _, containerState := range pod.Status.ContainerStatuses {
+		if containerState.State.Waiting != nil {
+			contains = true
+			break
+		}
+	}
+	return contains
+}
